@@ -1,24 +1,31 @@
-import getCursorXY from "lib/getCursorXY";
 import * as React from "react";
-import { Popover } from "react-tiny-popover";
+import { Popover, ArrowContainer } from "react-tiny-popover";
+import Translator from "./Translator";
+import LanguageDetect from "languagedetect";
 
-function TranslateArea() {
+interface TranslateAreaProps {
+	data: string;
+}
+
+const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 	const [selected, setSelected] = React.useState<string>();
 	const [visible, setVisible] = React.useState<boolean>(false);
-	const inputEl: React.RefObject<HTMLTextAreaElement> = React.createRef();
-	const [popupPos, setPopupPos] = React.useState({ x: 0, y: 0 });
+	const [pos, setPos] = React.useState({ x: 0, y: 0 });
+	const [languages, setLanguages] = React.useState<string[]>();
 
-	const showPopover = (
-		e: React.MouseEvent<HTMLTextAreaElement, MouseEvent>
-	) => {
-		const el = e.currentTarget;
-		const selText = el.value.substring(el.selectionStart, el.selectionEnd);
+	React.useEffect(() => {
+		const langDetect = new LanguageDetect();
+		setLanguages(langDetect.detect(props.data, 2).map((e) => e[0]));
+		console.log(languages);
+	}, [props.data]);
 
-		if (selText) {
-			const pos = getCursorXY(el, el.selectionStart);
-			setPopupPos(pos);
-			console.log(pos);
-			setSelected(selText);
+	const showPopover = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		const sel = window.getSelection();
+		const text = sel?.toString();
+
+		if (text) {
+			setPos({ x: e.clientX, y: e.clientY });
+			setSelected(text);
 			setVisible(true);
 		}
 	};
@@ -26,28 +33,37 @@ function TranslateArea() {
 	return (
 		<div style={{ height: "90vh" }}>
 			<Popover
-				contentLocation={{ top: popupPos.y, left: popupPos.x }}
+				contentLocation={{ top: pos.y - 40, left: pos.x - 30 }}
+				positions={["top", "bottom"]}
+				align="center"
+				reposition
 				isOpen={visible}
-				content={
-					<div style={{ backgroundColor: "red", zIndex: 10 }}>
-						{selected}
-					</div>
-				}
+				content={({ position, childRect, popoverRect }) => (
+					<ArrowContainer
+						position={position}
+						popoverRect={popoverRect}
+						childRect={childRect}
+						arrowSize={10}
+						arrowColor={"red"}
+					>
+						<Translator text={selected!} languages={languages!} />
+					</ArrowContainer>
+				)}
 			>
-				<textarea
+				<div
+					style={{
+						height: "100%",
+						width: "100%",
+						backgroundColor: "#222",
+					}}
 					onMouseUp={showPopover}
 					onMouseDown={() => setVisible(false)}
-					ref={inputEl}
-					spellCheck="false"
-					style={{
-						width: "100%",
-						height: "100%",
-						fontFamily: "'Times New Roman', Times, serif;",
-					}}
-				/>
+				>
+					{props.data}
+				</div>
 			</Popover>
 		</div>
 	);
-}
+};
 
 export default TranslateArea;
