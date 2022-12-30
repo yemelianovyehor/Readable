@@ -1,15 +1,46 @@
 import * as React from "react";
-import translatePopup from "@styles/translatePopup.module.css";
-import Reverso from "reverso-api";
+import style from "@styles/translatePopup.module.css";
+import { useQuery } from "react-query";
 
 interface TranslatorProps {
 	text: string;
-	languages: string[];
 }
 
+const fetchTranslation = async (text: string) => {
+	if (text === "") {
+		throw new Error("returned text is empty");
+	}
+	return await fetch("/api/translate", {
+		method: "POST",
+		body: JSON.stringify(text),
+	})
+		.then(async (res) => {
+			if (res.status >= 400) {
+				throw new Error(
+					`Error ${res.status}: ${(await res.json()).message}`
+				);
+			}
+			return (await res.json()) as { lang: string; text: string };
+		})
+		.catch((e: Error) => {
+			throw new Error(e.message);
+		});
+};
+
 const Translator: React.FunctionComponent<TranslatorProps> = (props) => {
+	const { isSuccess, isError, data, error } = useQuery(
+		"translation",
+		async () => await fetchTranslation(props.text)
+	);
+
 	return (
-		<div className={translatePopup["translate-popup"]}>{props.text}</div>
+		<div className={style["translate-popup"]}>
+			{isError
+				? "Error"
+				: isSuccess
+				? `(${data.lang}) ${data.text}`
+				: <div className={style["loader"]}></div>}
+		</div>
 	);
 };
 
