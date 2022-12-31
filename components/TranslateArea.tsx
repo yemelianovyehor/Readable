@@ -27,10 +27,15 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 
 	const hide = () => {
 		setVisible(false);
-		// queryClient.invalidateQueries({ queryKey: ["translation"] });
-		// queryClient.cancelQueries("translation")
 		queryClient.removeQueries("translation");
 	};
+
+	const display = props.data.split("\n").map((v,i) => (
+		<span key={`line${i}`}>
+			{v}
+			<br />
+		</span>
+	));
 
 	return (
 		<div style={{ height: "90vh" }}>
@@ -55,7 +60,7 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 						onMouseUp={showPopover}
 						onMouseDown={hide}
 					>
-						{props.data}
+						{display}
 					</div>
 				</Popover>
 			</>

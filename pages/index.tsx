@@ -2,18 +2,28 @@ import Head from "next/head";
 // import { Inter } from "@next/font/google";
 import Main from "@components/Main";
 import * as React from "react";
+import Textarea from "react-dropzone-textarea";
 
 // const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
 	const [data, setData] = React.useState("");
 	const input = React.createRef<HTMLTextAreaElement>();
-	const forwardInput = () => {
-		const el = input.current;
-		if (el?.value) {
-			setData(el.value);
-		}
+	// const forwardInput = () => {
+	// 	const el = input.current;
+	// 	console.log("forward")
+	// 	if (el?.value) {
+	// 		setData(el.value);
+	// 	}
+	// };
+	const forwardInput = (text: string) => {
+		setData(text);
 	};
+	React.useEffect(() => {
+		if (input.current) {
+			input.current.focus();
+		}
+	}, [input]);
 
 	return (
 		<>
@@ -32,8 +42,16 @@ export default function Home() {
 			<header>
 				<h1>Read Translate</h1>
 				<span>
-					<textarea ref={input} />
-					<input type="button" value="Paste" onClick={forwardInput} />
+					<Textarea
+						ref={input}
+						value={data}
+						onChange={(e: any) => forwardInput(e.target.value)}
+						onDropRead={(text: string) => forwardInput(text)}
+						style={{ width: "400px" }}
+						textareaProps={{
+							placeholder: "Write, Paste or drop a .txt here",
+						}}
+					/>
 				</span>
 			</header>
 			<Main data={data} />
