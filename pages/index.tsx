@@ -8,6 +8,11 @@ import Textarea from "react-dropzone-textarea";
 
 export default function Home() {
 	const [data, setData] = React.useState("");
+
+	React.useEffect(() => {
+		const ls = localStorage.getItem("text");
+		if (ls) setData(ls);
+	}, []);
 	const input = React.createRef<HTMLTextAreaElement>();
 	// const forwardInput = () => {
 	// 	const el = input.current;
@@ -17,6 +22,7 @@ export default function Home() {
 	// 	}
 	// };
 	const forwardInput = (text: string) => {
+		localStorage.setItem("text", text);
 		setData(text);
 	};
 	React.useEffect(() => {
