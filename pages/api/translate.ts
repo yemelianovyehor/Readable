@@ -18,7 +18,6 @@ export default async function handler(
 ) {
 	const data: { text: string; outputLanguage: TargetLanguageCode } =
 		await JSON.parse(req.body);
-	console.log(data.outputLanguage);
 	if (!data.text) {
 		res.status(400).json({ error: "text is empty" });
 		return;

@@ -9,13 +9,13 @@ import LangSelect from "@components/LangSelect";
 
 export default function Home() {
 	const [data, setData] = React.useState("");
-	const [outLang, setOutLang] = React.useState<string>("en");
+	const [outLang, setOutLang] = React.useState<string>("en-US");
 
 	React.useEffect(() => {
 		const lsText = localStorage.getItem("text");
 		if (lsText) setData(lsText);
 		const lsLang = localStorage.getItem("outLang");
-		setOutLang(lsLang ?? "en");
+		setOutLang(lsLang ?? "en-US");
 	}, []);
 	// const input = React.createRef<HTMLTextAreaElement>();
 	// const forwardInput = () => {
