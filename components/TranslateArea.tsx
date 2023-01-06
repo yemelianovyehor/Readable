@@ -5,6 +5,7 @@ import { useQueryClient } from "react-query";
 
 interface TranslateAreaProps {
 	data: string;
+	outLang: string;
 }
 
 const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
@@ -30,7 +31,7 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 		queryClient.removeQueries("translation");
 	};
 
-	const display = props.data.split("\n").map((v,i) => (
+	const display = props.data.split("\n").map((v, i) => (
 		<span key={`line${i}`}>
 			{v}
 			<br />
@@ -47,7 +48,7 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 					isOpen={visible}
 					content={
 						<>
-							<Translator text={selected!} />
+							<Translator text={selected!} outLang={props.outLang}/>
 						</>
 					}
 				>

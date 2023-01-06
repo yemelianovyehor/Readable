@@ -3,12 +3,13 @@ import TranslateArea from "./TranslateArea";
 
 interface MainProps {
 	data: string;
+	outLang: string;
 }
 
 const Main: React.FunctionComponent<MainProps> = (props) => {
 	return (
 		<main>
-			<TranslateArea data={props.data} />
+			<TranslateArea data={props.data} outLang={props.outLang}/>
 		</main>
 	);
 };

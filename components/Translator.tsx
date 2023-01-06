@@ -4,15 +4,16 @@ import { useQuery } from "react-query";
 
 interface TranslatorProps {
 	text: string;
+	outLang: string;
 }
 
-const fetchTranslation = async (text: string) => {
+const fetchTranslation = async (text: string, outLang: string) => {
 	if (text === "") {
 		throw new Error("returned text is empty");
 	}
 	return await fetch("/api/translate", {
 		method: "POST",
-		body: JSON.stringify(text),
+		body: JSON.stringify({ text: text, outputLanguage: outLang }),
 	})
 		.then(async (res) => {
 			if (res.status >= 400) {
@@ -30,16 +31,18 @@ const fetchTranslation = async (text: string) => {
 const Translator: React.FunctionComponent<TranslatorProps> = (props) => {
 	const { isSuccess, isError, data, error } = useQuery(
 		"translation",
-		async () => await fetchTranslation(props.text)
+		async () => await fetchTranslation(props.text, props.outLang)
 	);
 
 	return (
 		<div className={style["translate-popup"]}>
-			{isError
-				? "Error"
-				: isSuccess
-				? `(${data.lang}) ${data.text}`
-				: <div className={style["loader"]}></div>}
+			{isError ? (
+				"Error"
+			) : isSuccess ? (
+				`(${data.lang}) ${data.text}`
+			) : (
+				<div className={style["loader"]}></div>
+			)}
 		</div>
 	);
 };
