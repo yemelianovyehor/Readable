@@ -54,10 +54,11 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 				>
 					<div
 						style={{
-							height: "100%",
-							width: "100%",
-							backgroundColor: "#222",
+							// height: "100%",
+							// width: "100%",
+							// backgroundColor: "#222",
 						}}
+						className="translate-area"
 						onMouseUp={showPopover}
 						onMouseDown={hide}
 					>

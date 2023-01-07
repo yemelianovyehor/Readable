@@ -114,3 +114,15 @@ header {
 		color-scheme: dark;
 	}
 }
+
+.text-input {
+	background-color: white;
+}
+
+.translate-area {
+	height: 100%;
+	width: 100%;
+	background-color: #222;
+	text-overflow:"";
+	overflow-y:scroll;
+}
