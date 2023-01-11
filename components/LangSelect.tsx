@@ -17,6 +17,7 @@ const LangSelect: React.FunctionComponent<LangSelectProps> = (props) => {
 		<select
 			name={props.name}
 			id={props.name}
+			className="select-language"
 			onChange={props.onChange}
 			value={props.value}
 		>
