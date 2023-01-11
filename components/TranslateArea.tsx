@@ -26,7 +26,6 @@ const TranslateArea: React.FunctionComponent<TranslateAreaProps> = (props) => {
 			if (e.clientX + textWidth > window.innerWidth) {
 				X = window.innerWidth - textWidth - 100;
 				X = X > 0 ? X : 0;
-				console.log(`${window.innerWidth} - ${textWidth} - 100`);
 			} else {
 				X = e.clientX - 50;
 			}
